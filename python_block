@@ -1,0 +1,22 @@
+import pandas as pd
+
+# Load the Excel file
+file_path = '/path/to/your/file/pielou_buccal.xlsx'  # Replace with the correct file path
+df = pd.read_excel(file_path)
+
+# Calculate Q1, Q3, and IQR
+Q1 = df['pielou_evenness'].quantile(0.25)
+Q3 = df['pielou_evenness'].quantile(0.75)
+IQR = Q3 - Q1
+
+# Define the range for outliers
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Identify outliers
+outliers = df[(df['pielou_evenness'] < lower_bound) | (df['pielou_evenness'] > upper_bound)]
+
+# Get the list of sample IDs that are outliers
+outlier_sample_ids = outliers['sample-id'].tolist()
+
+print(outlier_sample_ids)
